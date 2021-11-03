@@ -1,0 +1,5 @@
+Possible to modify:
+
+Discretize range. Line 52 - 59
+Train/Test data ratio. Line 69
+LogisticRegression max interations. Line 81, 121, 221
