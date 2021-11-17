@@ -1,6 +1,6 @@
-import DataBalanceExtended
+import pandas as pd
 
-t = DataBalanceExtended.buildRatioMap(['a'])
+df = pd.read_csv('adult_race_comb.txt',sep='\t')
 
-for i in t:
-    print(i)
+
+df.to_csv('b.csv')

@@ -86,4 +86,4 @@ for i,j in enumerate(t):
 
 
 df = pd.DataFrame(rows,columns=cols)
-df.to_csv('adult_race_comb', sep='\t', encoding='utf-8')
+df.to_csv('adult_race_comb.csv', encoding='utf-8')
