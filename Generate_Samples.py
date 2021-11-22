@@ -10,22 +10,19 @@ from scipy.spatial import distance
 from sklearn.neighbors import NearestNeighbors as NN
 
 def get_ngbr(df, knn):
-            rand_sample_idx = random.randint(0, df.shape[0] - 1)
-            parent_candidate = df.iloc[rand_sample_idx]
-            ngbr = knn.kneighbors(parent_candidate.values.reshape(1,-1),3,return_distance=False)
-            candidate_1 = df.iloc[ngbr[0][0]]
-            candidate_2 = df.iloc[ngbr[0][1]]
-            candidate_3 = df.iloc[ngbr[0][2]]
-            return parent_candidate,candidate_2,candidate_3
+    rand_sample_idx = random.randint(0, df.shape[0] - 1)
+    parent_candidate = df.iloc[rand_sample_idx]
+    ngbr = knn.kneighbors(parent_candidate.values.reshape(1,-1),3,return_distance=False)
+    candidate_1 = df.iloc[ngbr[0][0]]
+    candidate_2 = df.iloc[ngbr[0][1]]
+    candidate_3 = df.iloc[ngbr[0][2]]
+    return parent_candidate,candidate_2,candidate_3
 
-def generate_samples(no_of_samples,df,df_name, cr=0.8,f=0.8):
-    
+def generate_samples(no_of_samples,df,df_name,cr,f):
     total_data = df.values.tolist()
     knn = NN(n_neighbors=5,algorithm='auto').fit(df)
-    
+    print("cr: ", cr, " AND f: ", f)
     for _ in range(no_of_samples):
-        cr = 0.8
-        f = 0.8
         parent_candidate, child_candidate_1, child_candidate_2 = get_ngbr(df, knn)
         new_candidate = []
         for key,value in parent_candidate.items():
