@@ -1,0 +1,387 @@
+%%
+%% This is file `sample-authordraft.tex',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% samples.dtx  (with options: `authordraft')
+%% 
+%% IMPORTANT NOTICE:
+%% 
+%% For the copyright see the source file.
+%% 
+%% Any modified versions of this file must be renamed
+%% with new filenames distinct from sample-authordraft.tex.
+%% 
+%% For distribution of the original source see the terms
+%% for copying and modification in the file samples.dtx.
+%% 
+%% This generated file may be distributed as long as the
+%% original source files, as listed above, are part of the
+%% same distribution. (The sources need not necessarily be
+%% in the same archive or directory.)
+%%
+%% The first command in your LaTeX source must be the \documentclass command.
+\documentclass[sigconf]{acmart}
+\usepackage{tabulary}
+%% NOTE that a single column version may required for 
+%% submission and peer review. This can be done by changing
+%% the \doucmentclass[...]{acmart} in this template to 
+%% \documentclass[manuscript,screen]{acmart}
+%% 
+%% To ensure 100% compatibility, please check the white list of
+%% approved LaTeX packages to be used with the Master Article Template at
+%% https://www.acm.org/publications/taps/whitelist-of-latex-packages 
+%% before creating your document. The white list page provides 
+%% information on how to submit additional LaTeX packages for 
+%% review and adoption.
+%% Fonts used in the template cannot be substituted; margin 
+%% adjustments are not allowed.
+
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+\AtBeginDocument{%
+  \providecommand\BibTeX{{%
+    \normalfont B\kern-0.5em{\scshape i\kern-0.25em b}\kern-0.8em\TeX}}}
+
+%% Rights management information.  This information is sent to you
+%% when you complete the rights form.  These commands have SAMPLE
+%% values in them; it is your responsibility as an author to replace
+%% the commands and values with those provided to you when you
+%% complete the rights form.
+\setcopyright{acmcopyright}
+\copyrightyear{2021}
+\acmYear{2021}
+\acmDOI{NONE}
+
+
+%%
+%% Submission ID.
+%% Use this when submitting an article to a sponsored event. You'll
+%% receive a unique submission ID from the organizers
+%% of the event, and this ID should be used as the parameter to this command.
+%%\acmSubmissionID{123-A56-BU3}
+
+%%
+%% The majority of ACM publications use numbered citations and
+%% references.  The command \citestyle{authoryear} switches to the
+%% "author year" style.
+%%
+%% If you are preparing content for an event
+%% sponsored by ACM SIGGRAPH, you must use the "author year" style of
+%% citations and references.
+%% Uncommenting
+%% the next command will enable that style.
+%%\citestyle{acmauthoryear}
+
+%%
+%% end of the preamble, start of the body of the document source.
+\begin{document}
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+\title{How Data Balancing and Hyper-parameter Optimization Could Improve Fair-SMOTE }
+
+%%
+%% The "author" command and its associated commands are used to define
+%% the authors and their affiliations.
+%% Of note is the shared affiliation of the first two authors, and the
+%% "authornote" and "authornotemark" commands
+%% used to denote shared contribution to the research.
+\author{Vitus Putra}
+\affiliation{%
+  \institution{North Carolina State University}
+  \city{Raleigh}
+  \country{USA}}
+\email{vaputra@ncsu.edu}
+
+\author{Yi Qiu}
+\affiliation{%
+  \institution{North Carolina State University}
+  \city{Raleigh}
+  \country{USA}}
+\email{yqiu9@ncsu.edu}
+
+%%
+%% By default, the full list of authors will be used in the page
+%% headers. Often, this list is too long, and will overlap
+%% other information printed in the page headers. This command allows
+%% the author to define a more concise list
+%% of authors' names for this purpose.
+\renewcommand{\shortauthors}{Putra and Qiu}
+
+%%
+%% The abstract is a short summary of the work to be presented in the
+%% article.
+\begin{abstract}
+  The advancement of AI and software engineering means that software system could now be used to affect the lives of many people. Without addressing the bias in such systems, the software might produce biased and harmful decision. It is important for us to address the bias present in our model. Chakraboty, et al. discovered that prior decision about  (a) what data was selected and (b) the labels assigned to those examples  are the root cause of bias [3]. Chakraboty, et al. introduced us to FAIR-SMOTE algorithm, which addressed these issues.
+  
+  In this paper, we are investigating how different ratio of training data and the introduction of hyper-parameter optimization in the FAIR-SMOTE affects the performance and bias of the model. We discovered that the same ratio between the groups in a training data does not necessarily produce the best model. In addition, adding an automated hyper-parameter optimization result in the same performance and fairness as the original Fair-SMOTE proposed by Chakraboty, et al..  
+\end{abstract}
+
+%%
+%% The code below is generated by the tool at http://dl.acm.org/ccs.cfm.
+%% Please copy and paste the code instead of the example below.
+%%
+
+%%
+%% Keywords. The author(s) should pick words that accurately describe
+%% the work being presented. Separate the keywords with commas.
+\keywords{Machine Learning, Software Fairness, Mitigation of Bias}
+
+%%
+%% This command processes the author and affiliation and title
+%% information and builds the first part of the formatted document.
+\maketitle
+
+\section{Introduction}
+Today, software has capability to make decision that could affect many lives. It is our responsibility as software developers and researchers to create software that makes fair decision regardless of one's race, gender, status, etc. Unfair software could make unfair decision for underprivileged group, which is a thing that should be avoided. 
+
+One example of bias in software is when Obermeyer et al. discovered an evidence of racial bias in one widely used algorithm in the US healthcare systems [2]. The bias occurs due to the use of health cost attributes in predicting the health needs of patients. Less money is spent on Black patients despite the same level of needs, thus the algorithm falsely predicts that Black patients are healthier than the White patients.   
+
+In this paper, we aim to replicate Fair-SMOTE approach to improve fairness in our model. In the Fair-SMOTE model, Chakraboty et al. postulates that the root cause of the bias is the prior decision that generate training data. To fix this, Chakraboty et al. introduced the following remedy:
+\begin{enumerate}
+    \item We will remove biased label
+    \item We will then rebalance internal distribution so that they are equal based on class and sensitive attributes.
+\end{enumerate}
+Chakraboty et al. rebalance internal distribution equally, and we do not know if different balancing ratio could affect the performance or fairness of the model. In addition, the classifier model that Chakraboty et al. used hard-coded hyperparameter, which is sometimes not ideal if we try to improve the performance and fairness. In this paper, we will explore how different balancing ratios and introduction of automated hyperparameter optimization could affect the performance and fairness of the model. 
+
+For our hyperparameter optimization experiment, we introduce an extra step in the Fair-SMOTE process in which we will automatically do hyperparameter tuning to generate optimal model. This experiment is important because automating process could lead to greater practicability of Fair-SMOTE when it is used in industry setting. Instead of guessing the hyperparameter, we will try to use the hyperparameter tuning technique to help us generate optimal model. 
+
+For our balancing ratio experiment, we...[\textbf{YI}]
+
+Overall, this paper make the following contributions:
+\begin{enumerate}
+    \item Through our balancing ratio experiment, we show that equal ratio does not necessarily result in the best performance and fairness metrics
+    \item We show that hyperparameter tuning could result in good performance and fairness metrics.
+    \item Creating automated Fair-SMOTE process could help us understand how we could apply Fair-SMOTE in the real-life situation.
+\end{enumerate}
+
+\subsection{Replication Package}
+We published our sourcecode in GitHub to facilitate open science (\url{https://github.com/VitusP/Fair-SMOTE})
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\linewidth]{./images/Fair-SMOTE-Flow}
+  \caption{Fair-SMOTE algorithm flowchart proposed by Chakraboty et al.}
+\end{figure*}
+
+\section{Related Work}
+Data Preparation on the training data, is the core of software fairness research. Prior research shows that fairness if affected by the transformation made on the training data, particularly the imbalanced data-sets [4]. A Machine Learning system that is used to predict an outcome generally follows a pipeline:
+\begin{enumerate}
+    \item Data collection: Gathering of data and labeling the data.
+    \item Data pre-processing: Prepare the data to be used to train a prediction model
+    \item Model selection: Process of generating appropriate model to predict certain outcome
+    \item Prediction and assessment: The model is used to predict an outcome and the performance and fairness is measured
+\end{enumerate}
+
+The decision made in each of these process could affect the fairness of the model. Hence, there are many prior research that deals with specific process. In this paper, however, we will focus on Fair-SMOTE by Chakraboty et al. 
+
+\subsection{Fair-SMOTE}
+Our paper rely heavily on Chakraboty et al. Fair-SMOTE algorithm. In short, Fair-SMOTE balances data based on the class and sensitive attributes. Fair-SMOTE ensures that privileged and underprivileged group have an equal amount of positive and negative examples in the training data sets [1].
+
+In its core, Fair-SMOTE solves data imbalance. The first step of Fair-SMOTE is to divide the training data into subgroups based on its protected attribute and class. Given that the class are binary, there will be four subgroups of unequal sizes (Favorable & Privileged, Favorable & Unprivileged, Unfavorable & Privileged, Unfavorable & Unprivileged).
+
+Fair-SMOTE will then synthetically generate new data points for all subgroups except the subgroup that has the largest size. The result of this is that all subgroups will have equal size. Instead of randomly create new data point, Fair-SMOTE creates data that is close to its parent point, ensuring that the generated data belong to the same data distribution. Figure 1 shows the flowchart of the algorithm.
+
+In Chakraboty et al. it is shown that Fair-SMOTE could reduce bias while at the same time maintaining its performance across different data sets [1]. Chakraboty et al. argue that Fair-SMOTE is unique and more useful due to the following reasons:
+\begin{enumerate}
+    \item \textbf{Combination}: Fair-SMOTE approach find, explain, and remove bias without treating them as separate problems.
+    \item \textbf{Improve fairness without degrading performance}: Fair-SMOTE improves the fairness scores as well as F1 and recall scores. 
+    \item \textbf{Generality}: Fair-SMOTE focused on data pre-processing, thus it does not depends on specific models. 
+    \item \textbf{Versatility}: Fair-SMOTE shows that keeping equal proportion of all protected groups in the data is important. 
+\end{enumerate}
+
+We have explored the strength of Fair-SMOTE. However, the original paper does not give a possible steps on how Fair-SMOTE could be used in the real world. Currently, different software systems are being used to create decision based on a data. It is necessary for us to investigate how Fair-SMOTE could be adopted by software industry and practitioners. 
+
+In their paper, Chakraboty et al. did not include the following investigations:
+\begin{enumerate}
+    \item Does automated hyperparameter optimization improve the fairness and performance of Fair-SMOTE? Currently, Chakraboty et al. use hard-coded hyper-parameters for every classifiers.
+    \item Does different balancing ration drastically affect the fairness of Fair-SMOTE? In other word, does Fair-SMOTE only work if the data balancing ratio is perfect (equal across subgroup)?
+\end{enumerate}
+
+In our paper, we will investigate how hyperparameters tuning could affect the performance and fairness of Fair-SMOTE. Integrating automated hyper-parameter tuning process in the Fair-SMOTE algorithm help us improve practicability of the algorithm in the real-world scenario. In addition, investigating different balancing ratio could reinforce the idea that perfect balance across subgroups truly create a fairer model. 
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\linewidth]{./images/dataset}
+  \caption{Datasets used in this research paper}
+\end{figure*}
+
+\begin{table*}
+  \caption{Fairness Metrics}
+  \label{tab:commands}
+  \begin{tabulary}{\linewidth}{L|L|L}
+    \hline
+    Metric & Definition & Description\\
+    \hline
+    Average Odds Difference (AOD) & $TPR=TP/(TP+FN), FPR=FP/(FP+TN), AOD = ((FPR_U - FPR_P)+(TPR_U - TPR_P))/2$& AOD is average difference in FPR and TPR for unprivileged and unprivileged group. Ideal value is 0. \\\hline
+    
+    Equal Opportunity Difference (EOD) & $EOD=TPR_U-TPR_P$& Difference of TPR for unprivileged and privileged group. Ideal value is 0. \\\hline
+    
+    Statistical Parity Difference (SPD) & $SPD=P[Y=1|PA=0]-P[Y=1|PA=1]$ & Difference between probability of unprivileged group (protected attribute PA=0) gets favorable prediction (Y=1) and probability of privileged group (PA=1) gets favorable prediction (Y=1) \\\hline
+    
+    Disparate Impact (DI) & $DI=P[Y=1|PA=0]/P[Y=1|PA=1]$& Similar to SPD but instead of difference of probability, the ratio is calculated instead. \\\hline
+    \hline
+\end{tabulary} 
+\end{table*}
+
+\newpage
+\section{Literature Review}
+
+Previous research on mitigating bias focused on pre-processing stage. For example, Kamiran and Calders proposed uniform and preferential sampling in addition to removal of sensitive attributes [7]. In addition, re-labelling of training samples and assignment of weight to the training data set are also proposed.
+
+Valentim et al. investigates several pre-processing strategies in their paper. First, they investigate how the removal of sensitive attributes affect the fairness of the model. They discovered that removing sensitive attributes does not always lead to the creation of models that make fairer prediction [4]. 
+
+In addition, Valentim et al. also investigates how selection techniques such as cross-validators and sampling methods could affect the fairness of the model. They discovered that sampling method is one of the factors that affects the fairness and predictive performance the most. In addition, the choice of model affects the fairness and predictive performance.
+
+As we could see, a lot of research focused on separate process of identifying and mitigating bias in machine learning models. Fair-SMOTE, in contrast, unified the process of discovering and mitigating bias. Fair-SMOTE could be used with multiple models and as a result, it has better practicability for real-world implementation.
+
+\textbf{[Yi, ADD YOUR LITERATURE REVIEW]}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\linewidth]{./images/FairSMOTE-OPT-Flow}
+  \caption{Datasets used in this research paper}
+\end{figure*}
+\section{Methodology}
+
+In this paper, we are investigating whether hyperparameter optimization and different balancing ratio could affect the performance and fairness of the machine learning model. We will divide the experiment into two parts, first is the hyperparameter optimization and the next is balancing ratio optimization. 
+
+\subsection{Fair-SMOTE Hyperparameter Optimization}
+For hyperparameter optimization, we use similar method as the original fair-SMOTE proposed by Chakraboty et al. The main difference would be that we introduced an automated hyperparameter tuning using GridSearch algorithm. 
+
+At its core, Fair-SMOTE solves data imbalance problem. The first step of Fair-SMOTE is to divide the data into subgroup based on protected attributes and classes. For example, for our experiment using Compas[5] and Adult[6] datasets, we will have 4 subgroups:
+\begin{enumerate}
+    \item Favorable and Privileged
+    \item Favorable and Underprivileged
+    \item  Unfavorable and Privileged
+    \item Unfavorable and Underprivileged
+\end{enumerate}
+Fair-SMOTE algorithm will then generate synthetic data points for all of the subgroups except the subgroups that have the greatest amount of data points. The result of the process is that all of the four subgroups have the equal sizes of data points. Unlike ordinary SMOTE, however, Fair-SMOTE balances data using class and sensitive attributes so that privileged and underprivileged group have equal positive and negative representatives in the training datasets [1]. 
+
+Similar to original fair-SMOTE, we will use mutation amount (f) and crossover frequency (cr) parameters with the value of 0.8 for each of them. In addition, to prevent the lost of important association between variables, Fair-SMOTE extrapolates all of the variables by the same amount. The process of generating synthetic data is described as follows:
+\begin{enumerate}
+    \item Select random parent point p from the subgroups
+    \item Using k-nearest neighbors, we select two data pint (c1 and c2) which are closest to p.
+    \item A new data point is then created. The step repeats until all subgroups have the equal size of data points. 
+\end{enumerate}
+
+After creating the synthetic data points, we do situation testing to discover and remove biased data label. According to Chakraboty et al, the inclusion of situation testing in the Fair-SMOTE process does not affect the performance of the model much [1].
+
+The next step would be training model that will be used to predict the test datasets. In the original Fair-SMOTE, manually hard-coded the hyperparameters for Logistic regression (LSR), Random Forest Classifier (RFC), and Support Vector Machine (SVM). In our method, we decided to automate hyperparameter tuning process for Logistic regression (LSR) and Random Forest Classifier (RFC). 
+
+\subsection{GridSearch Hyperparameter Tuning}
+We used GridSearch hyperparameter tuning provided by SciKit Learn package [8]. At its core, GridSearch tuning does exhaustive search over specified parameter valuse for an estimator. The parameters of the estimator used to apply these methods are optimized by cross-validated grid-search over a parameter grid. In our case, the GridSearch will be used to generate hyperparameters for Logistic Regression and Random Forest Classifier. The Figure 3 flowchart shows how the hyperparameter tuning is integrated into the Fair-SMOTE algorithm.
+
+\subsection{Hyperparameter Tuning Experimental Design}
+We will describe how we prepared data for the hyperparameter tuning experiment. Our research used 2 datasets (Figure 2) and 2 classification model, Logistic Regression (LSR) and Random Forest Classifier (RFC). We split the dataset using 5-fold cross-validation. We will have 80 percent of data goes to the training and 20 percent goes to testing group. We repeat the experiment 10 time and record each of the result. We then calculate the median of these ten runs. Figure 3 shows the flowchart of one run of the experiment.
+
+In addition, we ignored any rows that contain missing values. All of the continuous features are converted to categorical and non-numerical features are converted to numerical to make it possible to create classifier for our experiment. The hyperparameter tuning will use the training data to test the model. After a model is generated, the testing data will be classified. 
+
+\subsection{Statistical Test: Scott-Knott Test}
+Similar to the fair-SMOTE paper by Chakraboty et al. We use Scott-Knott test to compare two distributions of the experiment result. Scott-Knott test is a clustering algorithm that terminates when the difference between two group is not significant [4]. The algorithm finds split points that will maximize expected difference between the two groups. Given that G is split into group a and b, Scott-Knott test search for the maximum split difference:
+\[E(\delta) = |a|/|G|(E[a]-E[G])^2 + |b|/|G|(E[b]-E[G])^2\]
+Here, |b| is the size of group b. The result of the test is ranked. If two groups difference is significant, the algorithm will rank these groups separately. If the difference between group is not significant, Scott-Knot test put both group in the same rank. 
+
+\section{Result}
+
+The following section will show and discuss the result of both hyperparameter optimization and different balancing ratio experiments. 
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\linewidth]{./images/Adult-race-heat}
+  \caption{Adult race result ranked using Scott-Knott Test. The darker the highlight, the better the metrics.}
+\end{figure*}
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\linewidth]{./images/Adult-sex-heat}
+  \caption{Adult sex result ranked using Scott-Knott Test. The darker the highlight, the better the metrics.}
+\end{figure*}
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\linewidth]{./images/Compass-race-heat}
+  \caption{Compas race result ranked using Scott-Knott Test. The darker the highlight, the better the metrics.}
+\end{figure*}
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\linewidth]{./images/Compass-sex-heat}
+  \caption{Compas sex result ranked using Scott-Knott Test. The darker the highlight, the better the metrics.}
+\end{figure*}
+
+\subsection{Fair-SMOTE Hyperparameter Optimization}
+\textbf{RQ1: Does the introduction of hyperparameter tuning in Fair-SMOTE improves the fairness and performance of the model?}\\
+In our research, we show that the fair-SMOTE that uses automated hyperparameter optimization have similar performance and fairness compared to the original fair-SMOTE proposed by Chakraboty et al. In addition, The hyperoptimized fair-SMOTE also have better fairness compared to the original model and SMOTE model.
+
+In figure 4 and 5 of the Adult dataset result, we can see that the fairness metrics for the original Fair-SMOTE and the fair-SMOTE that uses hyperparameter optimization are similar. In addition, in Figure 4-7, we could see that the fair-SMOTE and fair-SMOTE that use hyperparameter has better fairness metrics compared to the SMOTE only and original model. This shows that the introduction of automated hyper-parameter optimization does not negatively affect Fair-SMOTE.
+
+\subsection{Ratio Balancing Experiment}
+\textbf{Yi THIS IS YOUR PART}
+
+\section{Discussion}
+\subsection{Why Hyperparameter Tuning?}
+The concern of bias in machine learning have motivated researchers to create fairer software. The logical next step for an algorithm such as Fair-SMOTE is to address is practicability in the real world. The current Fair-SMOTE algorithm rely on some hard-coded hyperparameters that might be unsuited for certain set of data. 
+
+In this paper, we proposed that integrating automated hyperparameter tuning into Fair-SMOTE algorithm could be an option for practitioners to use the algorithm in the real world environment. With hyperparameter tuning:
+\begin{itemize}
+    \item We do not have to manually find the best hyperparameters for different kind of models. 
+    \item We could analyze how different models perform against certain set of data easily.
+    \item We still maintain fair-SMOTE advantages such as generality and applicability.
+\end{itemize}
+However, there are several threats to validity of this research:\\
+\textbf{Limited use of data} - We only use two main datasets for this experiment, Compas [5] and Adult [6]. Some other datasets might create differing outcomes in the hyperparameter tuning experiment.\\
+\textbf{Metric bias} - We only use four fairness metrics in this experiment, hence we will explore different metrics in the future.\\
+\textbf{Choice of tuning algorithm}- We only use GridSearch algorithm for our tuning, which is not ideal for model that have greater amount of hyperparameter. In the future, we hope to use a more efficient tuning algorithm on a more extensive model.\\
+
+\section{Conclusion}
+In this paper, we investigate how the introduction of hyperparameter tuning in Fair-SMOTE and different balancing ratio could affect the performance and fairness metrics of the Fair-SMOTE algorithm proposed by Chakraboty et al. 
+
+For our hyperparameter optimization, we have shown that integrating hyperparameter tuning to the Fair-SMOTE algorithm does not negatively affects the fairness and performance metrics of the model. In addition, the hyperparameter optimization avoid the use of manual search when creating specific model. This is important because we want to see how Fair-SMOTE could be used in the real life scenario:
+\begin{itemize}
+    \item Greater flexibility on the choice of classification model, allowing us to investigate greater amount of models for a given dataset
+    \item Eliminate the need of hard-coded hyperparameters which means it could improve Fair-SMOTE practicability in the real-life environment
+    \item Different choice of tuning algorithm means we still able to asses the best model to use 
+\end{itemize}
+
+%%
+%% The acknowledgments section is defined using the "acks" environment
+%% (and NOT an unnumbered section). This ensures the proper
+%% identification of the section in the article metadata, and the
+%% consistent spelling of the heading.
+\begin{acks}
+To Dr. Menzies, who taught us the art of fairness in software engineering
+\end{acks}
+
+\begin{thebibliography}{9}
+\bibitem{Chakraboty}
+ Joymallya Chakraborty, Suvodeep Majumder, and Tim Menzies. 2021. Bias in Machine Learning Software: Why? How? What to Do?. In \emph{Proceedings of the 29th ACM Joint Meeting on European Software Engineering Conference and Symposium on the Foundations of Software Engineering (Athens, Greece) (ESEC/FSE 2021)}. Association for Computing Machinery, New York, NY, USA, 429–440. https://doi.org/10.1145/3468264.3468537
+
+\bibitem{Obermeyer}
+Obermeyer, Z., Powers, B., Vogeli, C., &amp; Mullainathan, S. (2019). Dissecting racial bias in an algorithm used to manage the health of populations. \emph{Science}, 366(6464), 447–453. https://doi.org/10.1126/science.aax2342 
+
+\bibitem{Valentim}
+Valentim, I., Lourenco, N., &amp; Antunes, N. (2019). The impact of data preparation on the fairness of software systems. \emph{2019 IEEE 30th International Symposium on Software Reliability Engineering (ISSRE)}. https://doi.org/10.1109/issre.2019.00046 
+
+\bibitem{Jelihovschi}
+ScottKnott: a package for performing the Scott-Knott clustering algorithm in R E.G. Jelihovschi; J.C. Faria; I.B. Allaman. Departament of Science and Tecnologics, UESC - Santa Cruz State University, 45662-900 Ilhéus, BA, Brasil. E-mails: eniojelihovs@gmail.com; joseclaudio.faria@gmail.com; ivanalaman@gmail.com
+
+\bibitem{propublica}
+"propublica/compas-analysi4s,” 2015. [Online]. Available: https://github.com/ propublica/compas-analysis
+
+
+\bibitem{UCI}
+“Uci:adult data set,” 1994. [Online]. Available: http://mlr.cs.umass.edu/ml/ datasets/Adult
+
+\bibitem{Kamiran}
+F. Kamiran and T. Calders, “Data preprocessing techniques for classification without discrimination,” Knowl. Inf. Syst., vol. 33, no. 1, pp. 1–33, Oct. 2012. [Online]. Available: https://doi.org/10.1007/s10115-011-0463-8
+
+\bibitem{Pedregosa}
+Scikit-learn: Machine Learning in Python, Pedregosa et al., JMLR 12, pp. 2825-2830, 2011.
+\end{thebibliography}
+
+
+\end{document}
+\endinput
+%%
+%% End of file `sample-authordraft.tex'.
